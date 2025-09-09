@@ -14,3 +14,11 @@ export const createUser = async (firstName, lastName, email, password) => {
   ]);
   return user[0];
 };
+
+export const getUserById = async (id) => {
+  const sql = `
+  SELECT * FROM users WHERE id = $1
+  `;
+  const { rows: user } = await db.query(sql, [id]);
+  return user[0];
+};
