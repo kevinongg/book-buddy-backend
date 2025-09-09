@@ -14,4 +14,6 @@ export const getReservationsByUserIdAndBookId = async (userId, bookId) => {
     FROM reservations
     WHERE book_id = $1 AND user_id = $2
   `;
+  const { rows: reservations } = await db.query(sql, [userId, bookId]);
+  return reservations;
 };

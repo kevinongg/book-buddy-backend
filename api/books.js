@@ -17,6 +17,14 @@ router.param("id", async (req, res, next, id) => {
   const book = await getBookById(id);
   if (!book) return res.status(404).send("Book not found");
   req.book = book;
+
+  if (req.user) {
+    const reservation = getReservationsByUserIdAndBookId(
+      req.user.id,
+      req.book.id
+    );
+    req.reservation = reservation;
+  }
   next();
 });
 
@@ -25,9 +33,10 @@ router.route("/:id").get(async (req, res) => {
 });
 
 router.route("/:id/reservations").get(requireUser, async (req, res) => {
-  const reservation = getReservationsByUserIdAndBookId(
-    req.user.id,
-    req.book.id
-  );
+  if (!req.user.id !== req.reservation.user_id) {
+    return res
+      .status(403)
+      .send("You are not authorized to see the reservations");
+  }
   res.status(200).send(reservation);
 });
