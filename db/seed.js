@@ -48,4 +48,3 @@ async function seed() {
     console.log(test2);
   }
 }
-// console.log(users[0].id);
