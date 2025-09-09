@@ -41,10 +41,10 @@ async function seed() {
   // console.log(fiveBooks);
   for (const bookId of fiveBooks) {
     const test = await createReservation(users[0].id, bookId);
-    console.log(test);
+    // console.log(test);
   }
   for (const bookId of lastFiveBooks) {
     const test2 = await createReservation(users[1].id, bookId);
-    console.log(test2);
+    // console.log(test2);
   }
 }
