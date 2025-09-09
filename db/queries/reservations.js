@@ -7,3 +7,11 @@ export const createReservation = async (userId, bookId) => {
   const { rows: reservation } = await db.query(sql, [userId, bookId]);
   return reservation[0];
 };
+
+export const getReservationsByUserIdAndBookId = async (userId, bookId) => {
+  const sql = `
+  SELECT *
+    FROM reservations
+    WHERE book_id = $1 AND user_id = $2
+  `;
+};

@@ -15,7 +15,7 @@ app.use(morgan("dev"));
 app.use(getUserFromToken);
 
 app.use("/users", userRoutes);
-app.use("books", bookRoutes);
+app.use("/books", bookRoutes);
 app.use("/reservations", reservationRoutes);
 
 app.use((err, req, res, next) => {
