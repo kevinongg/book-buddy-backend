@@ -37,3 +37,17 @@ export const getBookById = async (id) => {
   } = await db.query(sql, [id]);
   return book;
 };
+
+export const getBooksByReservationIdAndUserId = async (
+  reservationId,
+  userId
+) => {
+  const sql = `
+  SELECT reservations.book_id, books.title, books.author, books.description, books.cover_image
+    FROM reservations
+    JOIN books ON books.id = reservations.book_id
+    WHERE reservations.id = $1 AND reservations.user_id = $2
+  `;
+  const { rows: books } = await db.query(sql, [reservationId, userId]);
+  return books;
+};
