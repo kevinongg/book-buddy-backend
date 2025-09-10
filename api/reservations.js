@@ -18,6 +18,7 @@ router.use(requireUser);
 router
   .route("/")
   .get(async (req, res) => {
+    console.log(req.user.id);
     const reservations = await getReservationsByUserId(req.user.id);
     res.status(200).send(reservations);
   })

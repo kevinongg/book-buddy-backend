@@ -18,6 +18,10 @@ app.use("/users", userRoutes);
 app.use("/books", bookRoutes);
 app.use("/reservations", reservationRoutes);
 
+app.route("/").get((req, res) => {
+  res.send("Welcome to the Book Buddy API");
+});
+
 app.use((err, req, res, next) => {
   switch (err.code) {
     // Invalid type
