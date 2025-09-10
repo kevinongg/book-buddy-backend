@@ -32,3 +32,34 @@ export const getUserByEmailAndPassword = async (email, password) => {
   if (!userExists) return null;
   return user;
 };
+
+export const getUserInfoByUserId = async (userId) => {
+  const sql = `
+  SELECT 
+    users.id AS user_id,
+    users.first_name,
+    users.last_name,
+    users.email,
+    (SELECT json_agg(json_build_object(
+      'reservation_id', reservations.id,
+      'book_id', books.id,
+      'title', books.title,
+      'author', books.author,
+      'description', books.description,
+      'cover_image', books.cover_image)
+    ) FROM 
+        reservations
+      JOIN 
+        books ON books.id = reservations.book_id
+    ) AS 
+        reservations
+  FROM
+    users
+  WHERE
+    users.id = $1
+  `;
+  const {
+    rows: [user],
+  } = await db.query(sql, [userId]);
+  return user;
+};

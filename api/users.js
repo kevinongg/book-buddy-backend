@@ -1,12 +1,17 @@
-import { createUser, getUserByEmailAndPassword } from "#db/queries/users";
-
-import requireBody from "#middleware/requireBody";
-
-import { createToken } from "#utils/jwt";
-
 import express from "express";
 const router = express.Router();
 export default router;
+
+import {
+  createUser,
+  getUserByEmailAndPassword,
+  getUserInfoByUserId,
+} from "#db/queries/users";
+
+import requireBody from "#middleware/requireBody";
+import requireUser from "#middleware/requireUser";
+
+import { createToken } from "#utils/jwt";
 
 router
   .route("/register")
@@ -31,3 +36,9 @@ router
     const token = createToken({ id: user.id });
     res.status(200).send(token);
   });
+
+router.route("/me").get(requireUser, async (req, res) => {
+  const user = await getUserInfoByUserId(req.user.id);
+  if (!user) return res.status(404).send("User not found");
+  res.status(200).send(user);
+});
