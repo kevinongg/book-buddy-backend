@@ -23,10 +23,14 @@ router.param("id", async (req, res, next, id) => {
     req.book = book;
 
     if (req.user) {
-      const reservation = getReservationsByUserIdAndBookId(
+      const reservation = await getReservationsByUserIdAndBookId(
         req.user.id,
         req.book.id
       );
+      if (!reservation)
+        return res
+          .status(403)
+          .send("You are not authorized to see the reservation");
       req.reservation = reservation;
     }
     next();
@@ -45,12 +49,15 @@ router.route("/:id").get(async (req, res, next) => {
 
 router.route("/:id/reservations").get(requireUser, async (req, res, next) => {
   try {
-    if (!req.user.id !== req.reservation.user_id) {
-      return res
-        .status(403)
-        .send("You are not authorized to see the reservations");
-    }
-    res.status(200).send(reservation);
+    // if (
+    //   req.reservation === undefined ||
+    //   req.reservation.user_id !== req.user.id
+    // ) {
+    //   return res
+    //     .status(403)
+    //     .send("You are not authorized to see the reservation");
+    // }
+    res.status(200).send(req.reservation);
   } catch (error) {
     return next(error);
   }

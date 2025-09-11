@@ -20,10 +20,10 @@ export const getReservationsByUserIdAndBookId = async (userId, bookId) => {
   const sql = `
   SELECT *
     FROM reservations
-    WHERE book_id = $1 AND user_id = $2
+    WHERE user_id = $1 AND book_id = $2
   `;
   const { rows: reservations } = await db.query(sql, [userId, bookId]);
-  return reservations;
+  return reservations[0];
 };
 
 export const getReservationsByUserId = async (userId) => {
